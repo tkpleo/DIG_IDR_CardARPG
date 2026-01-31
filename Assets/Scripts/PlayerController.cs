@@ -16,18 +16,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float gravity = -9.81f;
 
     [Header("Dash")]
-    [SerializeField] private float dashCooldown = 1.5f;
-    [SerializeField] private float dashTime = 0.2f;
-    [SerializeField] private float dashSpeed = 8f;
+    [SerializeField] private float dodgeCooldown = 1.5f;
+    [SerializeField] private float dodgeTime = 0.2f;
+    [SerializeField] private float dodgeSpeed = 7f;
+
+    [Header("Attack")]
+    [SerializeField] private float attackCooldown = 0.5f;
+    [SerializeField] private float attackTime = 0.2f;
 
     [SerializeField] private float animationFinishTime = 0.9f;
 
-    private bool _canDash;
-    private bool _isDashing;
+    private bool _canDodge;
+    private bool _isDodging;
     private bool _canAttack;
-    private bool _isAttacking;
 
-    private bool _dashInput;
+    private bool _dodgeInput;
     private bool _attackInput;
 
     private Animator animator;
@@ -43,7 +46,7 @@ public class PlayerController : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
 
         _canAttack = true;
-        _canDash = true;
+        _canDodge = true;
         animator = GetComponent<Animator>();
     }
 
@@ -77,48 +80,40 @@ public class PlayerController : MonoBehaviour
         SpeedCalc();
 
         Move();
-        if (_dashInput && _canDash)
+        if (_dodgeInput && _canDodge && animator.GetBool("isDodging") == false)
         {
-            StartCoroutine(Dash());
+            StartCoroutine(Dodge());
         }
         Running();
-        if (_attackInput && _canAttack)
+        if (_attackInput && _canAttack && animator.GetBool("isAttacking") == false)
         {
             Attack();
         }
-
-        if (_isAttacking && animator.GetCurrentAnimatorStateInfo(1).normalizedTime >= animationFinishTime)
+        //if attack was triggered but animation is finished, untrigger
+        if (animator.GetBool("isAttacking") == true && animator.GetCurrentAnimatorStateInfo(1).normalizedTime >= animationFinishTime)
         {
-            _isAttacking = false;
+            _canAttack = true;
             animator.SetBool("isAttacking", false);
         }
 
     }
-
-    private void Attack()
-    {
-        if (!_isAttacking)
-        {
-            StartCoroutine(initAttack());
-        }
-    }
-
-    private IEnumerator initAttack()
+ 
+    private IEnumerator Attack()
     {
         yield return new WaitForSeconds(0.1f);
-        _isAttacking = true;
+        _canAttack = false;
         animator.SetBool("isAttacking", true);
 
     }
 
-    private IEnumerator Dash()
+    private IEnumerator Dodge()
     {
-        _canDash = false;
-        _isDashing = true;
-        yield return new WaitForSeconds(dashTime);
-        _isDashing = false;
-        yield return new WaitForSeconds(dashCooldown);
-        _canDash = true;
+        _canDodge = false;
+        animator.SetBool("isDodging", true);
+        yield return new WaitForSeconds(dodgeTime);
+        animator.SetBool("isDodging", false);
+        yield return new WaitForSeconds(dodgeCooldown);
+        _canDodge = true;
     }
 
     private void SpeedCalc()
@@ -148,9 +143,9 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        if (_isDashing)
+        if (_isDodging)
         {
-            _characterController.Move(transform.forward * dashSpeed * Time.deltaTime);
+            _characterController.Move(transform.forward * dodgeSpeed * Time.deltaTime);
             return;
         }
 
@@ -177,9 +172,9 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 input = _playerInputActions.Player.Move.ReadValue<Vector2>();
         _input = new Vector3(input.x, 0, input.y);
-        _dashInput = _playerInputActions.Player.Sprint.IsPressed();
+        _dodgeInput = _playerInputActions.Player.Sprint.IsPressed();
         _attackInput = _playerInputActions.Player.Attack.IsPressed();
 
-        Debug.Log(_input);
+        //Debug.Log(_input); Uncomment to see input vector in console
     }
 }
