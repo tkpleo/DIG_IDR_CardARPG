@@ -16,21 +16,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float gravity = -9.81f;
 
     [Header("Dash")]
-    [SerializeField] private float dodgeCooldown = 1.5f;
-    [SerializeField] private float dodgeTime = 0.2f;
-    [SerializeField] private float dodgeSpeed = 7f;
-
-    [Header("Attack")]
-    [SerializeField] private float attackCooldown = 0.5f;
-    [SerializeField] private float attackTime = 0.2f;
+    [SerializeField] private float dashCooldown = 1.5f;
+    [SerializeField] private float dashTime = 0.2f;
+    [SerializeField] private float dashSpeed = 8f;
 
     [SerializeField] private float animationFinishTime = 0.9f;
 
-    private bool _canDodge;
-    private bool _isDodging;
+    private bool _canDash;
+    private bool _isDashing;
     private bool _canAttack;
+    private bool _isAttacking;
 
-    private bool _dodgeInput;
+    private bool _dashInput;
     private bool _attackInput;
 
     private Animator animator;
@@ -46,7 +43,7 @@ public class PlayerController : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
 
         _canAttack = true;
-        _canDodge = true;
+        _canDash = true;
         animator = GetComponent<Animator>();
     }
 
@@ -80,40 +77,48 @@ public class PlayerController : MonoBehaviour
         SpeedCalc();
 
         Move();
-        if (_dodgeInput && _canDodge && animator.GetBool("isDodging") == false)
+        if (_dashInput && _canDash)
         {
-            StartCoroutine(Dodge());
+            StartCoroutine(Dash());
         }
         Running();
-        if (_attackInput && _canAttack && animator.GetBool("isAttacking") == false)
+        if (_attackInput && _canAttack)
         {
             Attack();
         }
-        //if attack was triggered but animation is finished, untrigger
-        if (animator.GetBool("isAttacking") == true && animator.GetCurrentAnimatorStateInfo(1).normalizedTime >= animationFinishTime)
+
+        if (_isAttacking && animator.GetCurrentAnimatorStateInfo(1).normalizedTime >= animationFinishTime)
         {
-            _canAttack = true;
+            _isAttacking = false;
             animator.SetBool("isAttacking", false);
         }
 
     }
- 
-    private IEnumerator Attack()
+
+    private void Attack()
+    {
+        if (!_isAttacking)
+        {
+            StartCoroutine(initAttack());
+        }
+    }
+
+    private IEnumerator initAttack()
     {
         yield return new WaitForSeconds(0.1f);
-        _canAttack = false;
+        _isAttacking = true;
         animator.SetBool("isAttacking", true);
 
     }
 
-    private IEnumerator Dodge()
+    private IEnumerator Dash()
     {
-        _canDodge = false;
-        animator.SetBool("isDodging", true);
-        yield return new WaitForSeconds(dodgeTime);
-        animator.SetBool("isDodging", false);
-        yield return new WaitForSeconds(dodgeCooldown);
-        _canDodge = true;
+        _canDash = false;
+        _isDashing = true;
+        yield return new WaitForSeconds(dashTime);
+        _isDashing = false;
+        yield return new WaitForSeconds(dashCooldown);
+        _canDash = true;
     }
 
     private void SpeedCalc()
@@ -143,9 +148,9 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        if (_isDodging)
+        if (_isDashing)
         {
-            _characterController.Move(transform.forward * dodgeSpeed * Time.deltaTime);
+            _characterController.Move(transform.forward * dashSpeed * Time.deltaTime);
             return;
         }
 
@@ -172,9 +177,9 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 input = _playerInputActions.Player.Move.ReadValue<Vector2>();
         _input = new Vector3(input.x, 0, input.y);
-        _dodgeInput = _playerInputActions.Player.Sprint.IsPressed();
+        _dashInput = _playerInputActions.Player.Sprint.IsPressed();
         _attackInput = _playerInputActions.Player.Attack.IsPressed();
 
-        //Debug.Log(_input); Uncomment to see input vector in console
+        Debug.Log(_input);
     }
 }
