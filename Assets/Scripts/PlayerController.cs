@@ -7,17 +7,14 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float maxSpeed = 5f;
+    [SerializeField] private float speed = 5f;
     [SerializeField] private float rotationSpeed = 360f;
-
-    [SerializeField] private float accelerationVal = 5f;
-    [SerializeField] private float decelerationVal = 10f;
 
     [SerializeField] private float gravity = -9.81f;
 
-    [Header("Dash")]
+    [Header("Dodge")]
     [SerializeField] private float dodgeCooldown = 1.5f;
-    [SerializeField] private float dodgeTime = 0.2f;
+    [SerializeField] private float dodgeTime = 0.5f;
     [SerializeField] private float dodgeSpeed = 7f;
 
     [Header("Attack")]
@@ -28,14 +25,18 @@ public class PlayerController : MonoBehaviour
 
     private bool _canDodge;
     private bool _isDodging;
-    private bool _canAttack;
-
     private bool _dodgeInput;
+
+    private bool _canAttack;
+    private bool _isAttacking;
     private bool _attackInput;
+
+    public Camera mainCamera;
+    public LayerMask groundLayer;
+    public Vector2 mousePosition;
 
     private Animator animator;
     private Vector3 _velocity;
-    private float _currentSpeed;
     private InputSystem_Actions _playerInputActions;
     private Vector3 _input;
     private CharacterController _characterController;
@@ -47,6 +48,8 @@ public class PlayerController : MonoBehaviour
 
         _canAttack = true;
         _canDodge = true;
+        _isDodging = false;
+        _isAttacking = false;
         animator = GetComponent<Animator>();
     }
 
@@ -73,27 +76,45 @@ public class PlayerController : MonoBehaviour
         {
             _velocity.y = gravity * Time.deltaTime;
         }
-
+        
         GetInput();
 
         Look();
-        SpeedCalc();
 
         Move();
-        if (_dodgeInput && _canDodge && animator.GetBool("isDodging") == false)
+
+        
+
+        if (_dodgeInput && _canDodge && _isDodging == false)
         {
             StartCoroutine(Dodge());
         }
-        Running();
-        if (_attackInput && _canAttack && animator.GetBool("isAttacking") == false)
+        
+        if (_attackInput && _canAttack && _isAttacking == false)
         {
-            Attack();
+            Ray ray = mainCamera.ScreenPointToRay(mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hitInfo))
+            {
+                Vector3 lookAtPoint = hitInfo.point;
+                Vector3 direction = lookAtPoint - transform.position;
+                direction.y = 0;
+
+                if (direction != Vector3.zero)
+                {
+                    Quaternion rotation = Quaternion.LookRotation(direction);
+                    transform.rotation = rotation;
+                }
+
+                //Debug.DrawLine(ray.origin, hitInfo.point, Color.red);
+            }
+            StartCoroutine(Attack());
         }
         //if attack was triggered but animation is finished, untrigger
-        if (animator.GetBool("isAttacking") == true && animator.GetCurrentAnimatorStateInfo(1).normalizedTime >= animationFinishTime)
+        if (_isAttacking == true && animator.GetCurrentAnimatorStateInfo(1).normalizedTime >= animationFinishTime)
         {
             _canAttack = true;
-            animator.SetBool("isAttacking", false);
+            _isAttacking = false;
+            animator.SetBool("isAttacking", _isAttacking);
         }
 
     }
@@ -102,37 +123,33 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         _canAttack = false;
-        animator.SetBool("isAttacking", true);
+        _isAttacking = true;
+        animator.SetBool("isAttacking", _isAttacking);
 
     }
 
     private IEnumerator Dodge()
     {
+        
         _canDodge = false;
-        animator.SetBool("isDodging", true);
+        _canAttack = false;
+        _isDodging = true;
+        animator.SetBool("isDodging", _isDodging);
         yield return new WaitForSeconds(dodgeTime);
-        animator.SetBool("isDodging", false);
+        _isDodging = false;
+        animator.SetBool("isDodging", _isDodging);
+        _canAttack = true;
         yield return new WaitForSeconds(dodgeCooldown);
         _canDodge = true;
     }
 
-    private void SpeedCalc()
-    {
-        if (_input == Vector3.zero && _currentSpeed > 0)
-        {
-            _currentSpeed -= decelerationVal * Time.deltaTime;
-        }
-        else if (_input != Vector3.zero && _currentSpeed < maxSpeed)
-        {
-            _currentSpeed += accelerationVal * Time.deltaTime;
-        }
-
-        _currentSpeed = Mathf.Clamp(_currentSpeed, 0, maxSpeed);
-    }
-
     private void Look()
     {
-        if (_input == Vector3.zero) return;
+
+        if (_input == Vector3.zero || _isDodging == true)
+        {
+            return;
+        }
 
         Matrix4x4 isometricMatrix = Matrix4x4.Rotate(Quaternion.Euler(0, 45, 0));
         Vector3 multipliedMatrix = isometricMatrix.MultiplyPoint3x4(_input);
@@ -143,19 +160,13 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        if (_isDodging)
+        if (_isDodging == true)
         {
             _characterController.Move(transform.forward * dodgeSpeed * Time.deltaTime);
-            return;
         }
 
-        Vector3 mDirection = transform.forward * _currentSpeed * _input.magnitude * Time.deltaTime + _velocity;
-
+        Vector3 mDirection = transform.forward * speed * _input.magnitude * Time.deltaTime + _velocity;
         _characterController.Move(mDirection);
-    }
-
-    private void Running()
-    {
         if (_input == Vector3.zero)
         {
             animator.SetBool("isRunning", false);
@@ -165,15 +176,15 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("isRunning", true);
         }
-
     }
 
     private void GetInput()
     {
         Vector2 input = _playerInputActions.Player.Move.ReadValue<Vector2>();
         _input = new Vector3(input.x, 0, input.y);
-        _dodgeInput = _playerInputActions.Player.Sprint.IsPressed();
+        _dodgeInput = _playerInputActions.Player.Dodge.IsPressed();
         _attackInput = _playerInputActions.Player.Attack.IsPressed();
+        mousePosition = _playerInputActions.Player.AttackPos.ReadValue<Vector2>();
 
         //Debug.Log(_input); Uncomment to see input vector in console
     }
