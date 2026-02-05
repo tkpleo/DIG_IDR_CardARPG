@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 _input;
     private CharacterController _characterController;
     private PlayerAttack playerAttack;
+    public Canvas _CardCanvas;
 
     private void Awake()
     {

@@ -132,7 +132,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""852140f2-7766-474d-8707-702459ba45f3"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
@@ -168,6 +168,51 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Dodge"",
                     ""type"": ""Button"",
                     ""id"": ""641cd816-40e6-41b4-8c3d-04687c349290"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Use Card 1"",
+                    ""type"": ""Button"",
+                    ""id"": ""3390e740-3ee6-4995-99ef-571dd4fbcf79"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Use Card 2"",
+                    ""type"": ""Button"",
+                    ""id"": ""1680897a-b874-458e-b836-c96d591dd1e7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Use Card 3"",
+                    ""type"": ""Button"",
+                    ""id"": ""bd17a69b-4f1e-4a55-846c-9a41ee3c7b50"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Use Card 4"",
+                    ""type"": ""Button"",
+                    ""id"": ""b9a2ac35-d018-491c-89ae-d256ad88cdd1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Use Card 5"",
+                    ""type"": ""Button"",
+                    ""id"": ""486f46aa-4da2-4f68-b5d2-2749b7bed06c"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -590,6 +635,61 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4494dc0a-e37a-4116-b99f-71dd5088c10b"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Use Card 1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4f575343-fa6d-4116-b328-2f2909357397"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Use Card 2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""33acf357-7e49-4173-9544-c248893cb727"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Use Card 3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5d1b76fa-1905-4741-83e5-6900e4383ef8"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Use Card 4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""07066833-4bf2-4926-b35c-73b9b3513f7a"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Use Card 5"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1186,6 +1286,11 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Previous = m_Player.FindAction("Previous", throwIfNotFound: true);
         m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
         m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
+        m_Player_UseCard1 = m_Player.FindAction("Use Card 1", throwIfNotFound: true);
+        m_Player_UseCard2 = m_Player.FindAction("Use Card 2", throwIfNotFound: true);
+        m_Player_UseCard3 = m_Player.FindAction("Use Card 3", throwIfNotFound: true);
+        m_Player_UseCard4 = m_Player.FindAction("Use Card 4", throwIfNotFound: true);
+        m_Player_UseCard5 = m_Player.FindAction("Use Card 5", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1288,6 +1393,11 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Previous;
     private readonly InputAction m_Player_Next;
     private readonly InputAction m_Player_Dodge;
+    private readonly InputAction m_Player_UseCard1;
+    private readonly InputAction m_Player_UseCard2;
+    private readonly InputAction m_Player_UseCard3;
+    private readonly InputAction m_Player_UseCard4;
+    private readonly InputAction m_Player_UseCard5;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1335,6 +1445,26 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Dodge".
         /// </summary>
         public InputAction @Dodge => m_Wrapper.m_Player_Dodge;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/UseCard1".
+        /// </summary>
+        public InputAction @UseCard1 => m_Wrapper.m_Player_UseCard1;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/UseCard2".
+        /// </summary>
+        public InputAction @UseCard2 => m_Wrapper.m_Player_UseCard2;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/UseCard3".
+        /// </summary>
+        public InputAction @UseCard3 => m_Wrapper.m_Player_UseCard3;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/UseCard4".
+        /// </summary>
+        public InputAction @UseCard4 => m_Wrapper.m_Player_UseCard4;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/UseCard5".
+        /// </summary>
+        public InputAction @UseCard5 => m_Wrapper.m_Player_UseCard5;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1388,6 +1518,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Dodge.started += instance.OnDodge;
             @Dodge.performed += instance.OnDodge;
             @Dodge.canceled += instance.OnDodge;
+            @UseCard1.started += instance.OnUseCard1;
+            @UseCard1.performed += instance.OnUseCard1;
+            @UseCard1.canceled += instance.OnUseCard1;
+            @UseCard2.started += instance.OnUseCard2;
+            @UseCard2.performed += instance.OnUseCard2;
+            @UseCard2.canceled += instance.OnUseCard2;
+            @UseCard3.started += instance.OnUseCard3;
+            @UseCard3.performed += instance.OnUseCard3;
+            @UseCard3.canceled += instance.OnUseCard3;
+            @UseCard4.started += instance.OnUseCard4;
+            @UseCard4.performed += instance.OnUseCard4;
+            @UseCard4.canceled += instance.OnUseCard4;
+            @UseCard5.started += instance.OnUseCard5;
+            @UseCard5.performed += instance.OnUseCard5;
+            @UseCard5.canceled += instance.OnUseCard5;
         }
 
         /// <summary>
@@ -1426,6 +1571,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Dodge.started -= instance.OnDodge;
             @Dodge.performed -= instance.OnDodge;
             @Dodge.canceled -= instance.OnDodge;
+            @UseCard1.started -= instance.OnUseCard1;
+            @UseCard1.performed -= instance.OnUseCard1;
+            @UseCard1.canceled -= instance.OnUseCard1;
+            @UseCard2.started -= instance.OnUseCard2;
+            @UseCard2.performed -= instance.OnUseCard2;
+            @UseCard2.canceled -= instance.OnUseCard2;
+            @UseCard3.started -= instance.OnUseCard3;
+            @UseCard3.performed -= instance.OnUseCard3;
+            @UseCard3.canceled -= instance.OnUseCard3;
+            @UseCard4.started -= instance.OnUseCard4;
+            @UseCard4.performed -= instance.OnUseCard4;
+            @UseCard4.canceled -= instance.OnUseCard4;
+            @UseCard5.started -= instance.OnUseCard5;
+            @UseCard5.performed -= instance.OnUseCard5;
+            @UseCard5.canceled -= instance.OnUseCard5;
         }
 
         /// <summary>
@@ -1789,6 +1949,41 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDodge(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Use Card 1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUseCard1(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Use Card 2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUseCard2(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Use Card 3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUseCard3(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Use Card 4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUseCard4(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Use Card 5" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUseCard5(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
