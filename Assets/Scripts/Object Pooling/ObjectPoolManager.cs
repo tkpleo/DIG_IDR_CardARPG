@@ -1,130 +1,103 @@
-using UnityEngine;
+using NUnit.Framework;
 using System.Collections.Generic;
-using UnityEngine.Pool;
+using UnityEditor;
+using UnityEngine;
+using System.Linq;
 
 public class ObjectPoolManager : MonoBehaviour
 {
-    [SerializeField] private bool _addToDontDestroyOnLoad = false;
+    public static List<PooledObjectInfo> objectPools = new List<PooledObjectInfo>();
 
-    private GameObject _emptyHolder;
+    // Backwards-compatible SpawnObject
+    public static GameObject SpawnObject(GameObject objectSpawn, Vector3 spawnPosition, Quaternion spawnRotation)
+        => SpawnObject(objectSpawn, spawnPosition, spawnRotation, 0);
 
-    private static GameObject _bulletsEmpty;
-
-    private static Dictionary<GameObject, ObjectPool<GameObject>> _objectPools;
-    private static Dictionary<GameObject, GameObject> _cloneToPrefabMap;
-
-    public enum PoolType
+    // New overload: can specify an initialPoolSize to create when the pool is first created
+    public static GameObject SpawnObject(GameObject objectSpawn, Vector3 spawnPosition, Quaternion spawnRotation, int initialPoolSize)
     {
-        Bullets,
-    }
-
-    private void Awake()
-    {
-        _objectPools = new Dictionary<GameObject, ObjectPool<GameObject>>();
-        _cloneToPrefabMap = new Dictionary<GameObject, GameObject>();
-    }
-
-    private void SetupEmpties()
-    {
-        _emptyHolder = new GameObject("Object Pools");
-
-        _bulletsEmpty = new GameObject("Bullets");
-        _bulletsEmpty.transform.parent = _emptyHolder.transform;
-    }
-
-    private static void CreatePool(GameObject prefab, Vector3 pos, Quaternion rot, PoolType poolType = PoolType.Bullets)
-    {
-        ObjectPool<GameObject> pool = new ObjectPool<GameObject>(
-            createFunc: () => CreateObject(prefab, pos, rot, poolType),
-            actionOnGet: OnGetObject,
-            actionOnRelease: OnReleaseObject,
-            actionOnDestroy: OnDestroyObject
-            );
-        _objectPools.Add(prefab, pool);
-    }
-
-    private static GameObject CreateObject(GameObject prefab, Vector3 pos, Quaternion rot, PoolType poolType = PoolType.Bullets)
-    {
-        prefab.SetActive(false);
-
-        GameObject obj = Instantiate(prefab, pos, rot);
-
-        prefab.SetActive(true);
-
-        GameObject parentObject = SetParentObject(poolType);
-        obj.transform.SetParent(parentObject.transform);
-
-        return obj;
-    }
-
-    private static void OnGetObject(GameObject obj)
-    { 
-        //logic for when object is taken from pool
-    }
-    private static void OnReleaseObject(GameObject obj)
-    {
-        obj.SetActive(false);
-    }
-    private static void OnDestroyObject(GameObject obj)
-    {
-        if (_cloneToPrefabMap.ContainsKey(obj))
+        PooledObjectInfo pool = objectPools.Find(p => p.lookupString == objectSpawn.name);
+        if (pool == null)
         {
-            _cloneToPrefabMap.Remove(obj);
-        }
-    }
-     
-    private static GameObject SetParentObject(PoolType poolType)
-    {
-        switch (poolType)
-        {
-            case PoolType.Bullets:
+            pool = new PooledObjectInfo() { lookupString = objectSpawn.name };
+            objectPools.Add(pool);
 
-                return _bulletsEmpty;
-
-            default:
-                return null;
-        }
-    }
-
-    private static T SpawnObject<T>(GameObject objectToSpawn, Vector3 spawnPos, Quaternion spawnRotation, PoolType poolType = PoolType.Bullets) where T : Object
-    {
-        if (!_objectPools.ContainsKey(objectToSpawn))
-        {
-            CreatePool(objectToSpawn, spawnPos, spawnRotation, poolType);
-        }
-
-        GameObject obj = _objectPools[objectToSpawn].Get();
-
-        if (obj != null)
-        {
-            if (!_cloneToPrefabMap.ContainsKey(obj))
+            // Preload initial pool size as inactive objects
+            for (int i = 0; i < initialPoolSize; i++)
             {
-                _cloneToPrefabMap.Add(obj, objectToSpawn);
+                GameObject pre = Object.Instantiate(objectSpawn, Vector3.zero, Quaternion.identity);
+                pre.SetActive(false);
+                pool.inactiveObjects.Add(pre);
             }
-
-            obj.transform.position = spawnPos;
-            obj.transform.rotation = spawnRotation;
-            obj.SetActive(true);
-
-            if (typeof(T) == typeof(GameObject))
-            {
-                return obj as T;
-            }
-            
-            T component = obj.GetComponent<T>();
-            if (component == null)
-            {
-                Debug.LogError($"Object {objectToSpawn.name} doesn't have component of type {typeof(T)}");
-                return null;
-            }
-
-            return component;
         }
-        return null;
+
+        GameObject spawnableObj = pool.inactiveObjects.FirstOrDefault();
+
+        if (spawnableObj == null)
+        {
+            spawnableObj = Object.Instantiate(objectSpawn, spawnPosition, spawnRotation);
+        }
+        else
+        {
+            spawnableObj.transform.position = spawnPosition;
+            spawnableObj.transform.rotation = spawnRotation;
+            pool.inactiveObjects.Remove(spawnableObj);
+            spawnableObj.SetActive(true);
+        }
+
+        return spawnableObj;
     }
 
-    public static T SpawnObject<T>(T typePrefab, Vector3 spawnPos, Quaternion spawnRotation, PoolType poolType = PoolType.Bullets) where T : Component
+    // Convenience API: create or ensure a pool for a prefab with an initial size
+    public static void CreatePool(GameObject prefab, int initialSize)
     {
-        return SpawnObject<T>(typePrefab.gameObject, spawnPos, spawnRotation, poolType);
+        if (prefab == null || initialSize <= 0) return;
+
+        PooledObjectInfo pool = objectPools.Find(p => p.lookupString == prefab.name);
+        if (pool == null)
+        {
+            pool = new PooledObjectInfo() { lookupString = prefab.name };
+            objectPools.Add(pool);
+        }
+
+        // Add the requested number of inactive instances
+        for (int i = 0; i < initialSize; i++)
+        {
+            GameObject pre = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity);
+            pre.SetActive(false);
+            pool.inactiveObjects.Add(pre);
+        }
     }
+
+    public static void ReturnObjectToPool(GameObject obj)
+    {
+        if (obj == null) return;
+
+        // Note: original code strips "(Clone)" by removing last 7 chars.
+        // Keep same behavior but guard against unexpected names.
+        string goName = obj.name;
+        if (goName.EndsWith("(Clone)"))
+        {
+            goName = goName.Substring(0, goName.Length - 7);
+        }
+
+        PooledObjectInfo pool = objectPools.Find(p => p.lookupString == goName);
+
+        if (pool == null)
+        {
+            Debug.LogWarning("Trying to release an object that is not pooled: " + obj.name);
+        }
+        else
+        {
+            // Deactivate and add back to inactive list
+            obj.SetActive(false);       
+            pool.inactiveObjects.Add(obj);
+        }
+    }
+
+}
+
+public class PooledObjectInfo
+{
+    public string lookupString;
+    public List<GameObject> inactiveObjects = new List<GameObject>();
 }

@@ -40,11 +40,13 @@ public class PlayerController : MonoBehaviour
     private InputSystem_Actions _playerInputActions;
     private Vector3 _input;
     private CharacterController _characterController;
+    private PlayerAttack playerAttack;
 
     private void Awake()
     {
         _playerInputActions = new InputSystem_Actions();
         _characterController = GetComponent<CharacterController>();
+        playerAttack = GetComponent<PlayerAttack>();
 
         _canAttack = true;
         _canDodge = true;
@@ -92,39 +94,38 @@ public class PlayerController : MonoBehaviour
         
         if (_attackInput && _canAttack && _isAttacking == false)
         {
+            _isAttacking = true;
             Ray ray = mainCamera.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
                 Vector3 lookAtPoint = hitInfo.point;
                 Vector3 direction = lookAtPoint - transform.position;
                 direction.y = 0;
+               
 
                 if (direction != Vector3.zero)
                 {
                     Quaternion rotation = Quaternion.LookRotation(direction);
                     transform.rotation = rotation;
                 }
-
+                _canAttack = false;
+                playerAttack.InitAttack();
                 //Debug.DrawLine(ray.origin, hitInfo.point, Color.red);
+
             }
             StartCoroutine(Attack());
-        }
-        //if attack was triggered but animation is finished, untrigger
-        if (_isAttacking == true && animator.GetCurrentAnimatorStateInfo(1).normalizedTime >= animationFinishTime)
-        {
-            _canAttack = true;
-            _isAttacking = false;
-            animator.SetBool("isAttacking", _isAttacking);
         }
 
     }
  
     private IEnumerator Attack()
     {
-        yield return new WaitForSeconds(0.1f);
-        _canAttack = false;
-        _isAttacking = true;
         animator.SetBool("isAttacking", _isAttacking);
+        yield return new WaitForSeconds(attackTime);
+        _isAttacking = false;
+        animator.SetBool("isAttacking", _isAttacking);
+        yield return new WaitForSeconds(attackCooldown);
+        _canAttack = true;
 
     }
 
@@ -150,7 +151,10 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-
+        if (_isAttacking == true)
+        {
+            return;
+        }
         Matrix4x4 isometricMatrix = Matrix4x4.Rotate(Quaternion.Euler(0, 45, 0));
         Vector3 multipliedMatrix = isometricMatrix.MultiplyPoint3x4(_input);
 
@@ -164,7 +168,10 @@ public class PlayerController : MonoBehaviour
         {
             _characterController.Move(transform.forward * dodgeSpeed * Time.deltaTime);
         }
-
+        if (_isAttacking == true)
+        {
+            return;
+        }
         Vector3 mDirection = transform.forward * speed * _input.magnitude * Time.deltaTime + _velocity;
         _characterController.Move(mDirection);
         if (_input == Vector3.zero)

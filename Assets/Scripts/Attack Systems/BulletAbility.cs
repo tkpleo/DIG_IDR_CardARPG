@@ -5,5 +5,6 @@ using UnityEngine.Pool;
 public class BulletAbility: ScriptableObject
 {
     bool isActive;
-    int ammoCount;
+    int ammoCountIncrease;
+    int damageIncrease;
 }
