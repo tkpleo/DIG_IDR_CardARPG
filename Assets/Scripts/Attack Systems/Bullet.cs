@@ -11,6 +11,7 @@ public class Bullet : MonoBehaviour
     public int bulletDamage = 1;
     public bool isStunBullet = false;
     public bool isAOEBullet = false;
+    public float AOERadius = 0f;
     public bool isSlowBullet = false;
 
     // Update is called once per frame
@@ -46,6 +47,7 @@ public class Bullet : MonoBehaviour
         bulletDamage = 1;
         isStunBullet = false;
         isAOEBullet = false;
+        AOERadius = 0f;
     }
 
     private void OnEnable()

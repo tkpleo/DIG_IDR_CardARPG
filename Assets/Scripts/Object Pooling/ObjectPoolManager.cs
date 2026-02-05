@@ -8,12 +8,35 @@ public class ObjectPoolManager : MonoBehaviour
 {
     public static List<PooledObjectInfo> objectPools = new List<PooledObjectInfo>();
 
-    // Backwards-compatible SpawnObject
+    private GameObject _objectPoolEmptyHolder;
+
+    private static GameObject _bulletsEmpty;
+
+    public enum PoolType
+    {
+        Bullets,
+        None
+    }
+    public static PoolType poolingType;
+
+    private void Awake()
+    {
+        SetUpEmpties();
+    }
+
+    private void SetUpEmpties()
+    {
+        _objectPoolEmptyHolder = new GameObject("Pooled Objects");
+
+        _bulletsEmpty = new GameObject("Bullets");
+        _bulletsEmpty.transform.SetParent(_objectPoolEmptyHolder.transform);
+    }
+
     public static GameObject SpawnObject(GameObject objectSpawn, Vector3 spawnPosition, Quaternion spawnRotation)
         => SpawnObject(objectSpawn, spawnPosition, spawnRotation, 0);
 
     // New overload: can specify an initialPoolSize to create when the pool is first created
-    public static GameObject SpawnObject(GameObject objectSpawn, Vector3 spawnPosition, Quaternion spawnRotation, int initialPoolSize)
+    public static GameObject SpawnObject(GameObject objectSpawn, Vector3 spawnPosition, Quaternion spawnRotation, int initialPoolSize, PoolType poolType = PoolType.None)
     {
         PooledObjectInfo pool = objectPools.Find(p => p.lookupString == objectSpawn.name);
         if (pool == null)
@@ -22,10 +45,15 @@ public class ObjectPoolManager : MonoBehaviour
             objectPools.Add(pool);
 
             // Preload initial pool size as inactive objects
+            GameObject parentForPreloads = SetParentObject(poolType);
             for (int i = 0; i < initialPoolSize; i++)
             {
                 GameObject pre = Object.Instantiate(objectSpawn, Vector3.zero, Quaternion.identity);
                 pre.SetActive(false);
+                if (parentForPreloads != null)
+                {
+                    pre.transform.SetParent(parentForPreloads.transform);
+                }
                 pool.inactiveObjects.Add(pre);
             }
         }
@@ -34,7 +62,15 @@ public class ObjectPoolManager : MonoBehaviour
 
         if (spawnableObj == null)
         {
+
+            GameObject parentObject = SetParentObject(poolType);
+
             spawnableObj = Object.Instantiate(objectSpawn, spawnPosition, spawnRotation);
+            
+            if (parentObject != null)
+            {
+                spawnableObj.transform.SetParent(parentObject.transform);
+            }
         }
         else
         {
@@ -50,6 +86,12 @@ public class ObjectPoolManager : MonoBehaviour
     // Convenience API: create or ensure a pool for a prefab with an initial size
     public static void CreatePool(GameObject prefab, int initialSize)
     {
+        CreatePool(prefab, initialSize, PoolType.None);
+    }
+
+    // Overload that allows specifying a PoolType so preloaded instances can be parented correctly
+    public static void CreatePool(GameObject prefab, int initialSize, PoolType poolType)
+    {
         if (prefab == null || initialSize <= 0) return;
 
         PooledObjectInfo pool = objectPools.Find(p => p.lookupString == prefab.name);
@@ -59,11 +101,17 @@ public class ObjectPoolManager : MonoBehaviour
             objectPools.Add(pool);
         }
 
+        GameObject parentForPreloads = SetParentObject(poolType);
+
         // Add the requested number of inactive instances
         for (int i = 0; i < initialSize; i++)
         {
             GameObject pre = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity);
             pre.SetActive(false);
+            if (parentForPreloads != null)
+            {
+                pre.transform.SetParent(parentForPreloads.transform);
+            }
             pool.inactiveObjects.Add(pre);
         }
     }
@@ -91,6 +139,21 @@ public class ObjectPoolManager : MonoBehaviour
             // Deactivate and add back to inactive list
             obj.SetActive(false);       
             pool.inactiveObjects.Add(obj);
+        }
+    }
+
+    private static GameObject SetParentObject(PoolType poolType)
+    {
+        switch (poolType)
+        {
+            case PoolType.Bullets:
+                return _bulletsEmpty;
+
+            case PoolType.None:
+                return null;
+            
+            default:
+                return null;
         }
     }
 

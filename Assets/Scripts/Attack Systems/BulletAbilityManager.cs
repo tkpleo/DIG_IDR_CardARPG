@@ -37,13 +37,20 @@ public class BulletAbilityManager : MonoBehaviour
         if (BA_AOE == true)
         {
             bullet.isAOEBullet = true;
+            bullet.AOERadius = 2f;
         }
         if (BA_Slow == true)
         {
             bullet.isSlowBullet = true;
         }
-
+        
         bullet.bulletSpeed = bulletSpeed;
         bullet.bulletDamage = bulletDamage;
-    }
+
+        BA_DamageIncrease = false;
+        BA_DamageMultiplier = false;
+        BA_Stun = false;
+        BA_AOE = false;
+        BA_Slow = false;
+}
 }
