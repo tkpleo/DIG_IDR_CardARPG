@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d123696774cd104ab275ef334fbad69, type: 3}
-  m_Name: Slow
+  m_Name: 1_Damage Increase
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableCard
-  <CardName>k__BackingField: Slow
-  <CardDescription>k__BackingField: Next bullet will apply Slow to enemies
+  <CardName>k__BackingField: Damage Increase
+  <CardDescription>k__BackingField: Increases next bullet's damage by +1
   <Image>k__BackingField: {fileID: 0}
+  <cardIndex>k__BackingField: 1

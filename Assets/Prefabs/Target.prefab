@@ -474,6 +474,9 @@ MonoBehaviour:
   damageText: {fileID: 3596759372911177507}
   AOEExplosionVFX: {fileID: 3077343761403282166, guid: f78aaaec3b393e24ca74cd6de8194347, type: 3}
   slowAOEExplosionVFX: {fileID: 3077343761403282166, guid: 772bbfa2c72aa8f4eae03df3413c5102, type: 3}
+  stunAOEExplosionVFX: {fileID: 1943286446490004412, guid: e953460ff16e0a6459684f9b77202b5c, type: 3}
+  stunVFX: {fileID: 7966731087305637596, guid: 460babe280fe4aa41adc3fefd46f0c0b, type: 3}
+  slowVFX: {fileID: 7314526620251459061, guid: ccf28ea29cf499744ac31bab90073aba, type: 3}
   aoeLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295

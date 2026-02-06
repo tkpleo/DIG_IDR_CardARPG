@@ -174,7 +174,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Use Card 1"",
+                    ""name"": ""Card1"",
                     ""type"": ""Button"",
                     ""id"": ""3390e740-3ee6-4995-99ef-571dd4fbcf79"",
                     ""expectedControlType"": """",
@@ -183,7 +183,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Use Card 2"",
+                    ""name"": ""Card2"",
                     ""type"": ""Button"",
                     ""id"": ""1680897a-b874-458e-b836-c96d591dd1e7"",
                     ""expectedControlType"": """",
@@ -192,7 +192,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Use Card 3"",
+                    ""name"": ""Card3"",
                     ""type"": ""Button"",
                     ""id"": ""bd17a69b-4f1e-4a55-846c-9a41ee3c7b50"",
                     ""expectedControlType"": """",
@@ -201,7 +201,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Use Card 4"",
+                    ""name"": ""Card4"",
                     ""type"": ""Button"",
                     ""id"": ""b9a2ac35-d018-491c-89ae-d256ad88cdd1"",
                     ""expectedControlType"": """",
@@ -210,9 +210,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Use Card 5"",
+                    ""name"": ""Card5"",
                     ""type"": ""Button"",
                     ""id"": ""486f46aa-4da2-4f68-b5d2-2749b7bed06c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Redraw"",
+                    ""type"": ""Button"",
+                    ""id"": ""51318d20-3ec3-4577-a05d-d32faaf8b03e"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -645,7 +654,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Use Card 1"",
+                    ""action"": ""Card1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -656,7 +665,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Use Card 2"",
+                    ""action"": ""Card2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -667,7 +676,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Use Card 3"",
+                    ""action"": ""Card3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -678,7 +687,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Use Card 4"",
+                    ""action"": ""Card4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -689,7 +698,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Use Card 5"",
+                    ""action"": ""Card5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5593cce2-b92d-4954-a5c2-a5c62f82d99a"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Redraw"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1286,11 +1306,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Previous = m_Player.FindAction("Previous", throwIfNotFound: true);
         m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
         m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
-        m_Player_UseCard1 = m_Player.FindAction("Use Card 1", throwIfNotFound: true);
-        m_Player_UseCard2 = m_Player.FindAction("Use Card 2", throwIfNotFound: true);
-        m_Player_UseCard3 = m_Player.FindAction("Use Card 3", throwIfNotFound: true);
-        m_Player_UseCard4 = m_Player.FindAction("Use Card 4", throwIfNotFound: true);
-        m_Player_UseCard5 = m_Player.FindAction("Use Card 5", throwIfNotFound: true);
+        m_Player_Card1 = m_Player.FindAction("Card1", throwIfNotFound: true);
+        m_Player_Card2 = m_Player.FindAction("Card2", throwIfNotFound: true);
+        m_Player_Card3 = m_Player.FindAction("Card3", throwIfNotFound: true);
+        m_Player_Card4 = m_Player.FindAction("Card4", throwIfNotFound: true);
+        m_Player_Card5 = m_Player.FindAction("Card5", throwIfNotFound: true);
+        m_Player_Redraw = m_Player.FindAction("Redraw", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1393,11 +1414,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Previous;
     private readonly InputAction m_Player_Next;
     private readonly InputAction m_Player_Dodge;
-    private readonly InputAction m_Player_UseCard1;
-    private readonly InputAction m_Player_UseCard2;
-    private readonly InputAction m_Player_UseCard3;
-    private readonly InputAction m_Player_UseCard4;
-    private readonly InputAction m_Player_UseCard5;
+    private readonly InputAction m_Player_Card1;
+    private readonly InputAction m_Player_Card2;
+    private readonly InputAction m_Player_Card3;
+    private readonly InputAction m_Player_Card4;
+    private readonly InputAction m_Player_Card5;
+    private readonly InputAction m_Player_Redraw;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1446,25 +1468,29 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Dodge => m_Wrapper.m_Player_Dodge;
         /// <summary>
-        /// Provides access to the underlying input action "Player/UseCard1".
+        /// Provides access to the underlying input action "Player/Card1".
         /// </summary>
-        public InputAction @UseCard1 => m_Wrapper.m_Player_UseCard1;
+        public InputAction @Card1 => m_Wrapper.m_Player_Card1;
         /// <summary>
-        /// Provides access to the underlying input action "Player/UseCard2".
+        /// Provides access to the underlying input action "Player/Card2".
         /// </summary>
-        public InputAction @UseCard2 => m_Wrapper.m_Player_UseCard2;
+        public InputAction @Card2 => m_Wrapper.m_Player_Card2;
         /// <summary>
-        /// Provides access to the underlying input action "Player/UseCard3".
+        /// Provides access to the underlying input action "Player/Card3".
         /// </summary>
-        public InputAction @UseCard3 => m_Wrapper.m_Player_UseCard3;
+        public InputAction @Card3 => m_Wrapper.m_Player_Card3;
         /// <summary>
-        /// Provides access to the underlying input action "Player/UseCard4".
+        /// Provides access to the underlying input action "Player/Card4".
         /// </summary>
-        public InputAction @UseCard4 => m_Wrapper.m_Player_UseCard4;
+        public InputAction @Card4 => m_Wrapper.m_Player_Card4;
         /// <summary>
-        /// Provides access to the underlying input action "Player/UseCard5".
+        /// Provides access to the underlying input action "Player/Card5".
         /// </summary>
-        public InputAction @UseCard5 => m_Wrapper.m_Player_UseCard5;
+        public InputAction @Card5 => m_Wrapper.m_Player_Card5;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Redraw".
+        /// </summary>
+        public InputAction @Redraw => m_Wrapper.m_Player_Redraw;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1518,21 +1544,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Dodge.started += instance.OnDodge;
             @Dodge.performed += instance.OnDodge;
             @Dodge.canceled += instance.OnDodge;
-            @UseCard1.started += instance.OnUseCard1;
-            @UseCard1.performed += instance.OnUseCard1;
-            @UseCard1.canceled += instance.OnUseCard1;
-            @UseCard2.started += instance.OnUseCard2;
-            @UseCard2.performed += instance.OnUseCard2;
-            @UseCard2.canceled += instance.OnUseCard2;
-            @UseCard3.started += instance.OnUseCard3;
-            @UseCard3.performed += instance.OnUseCard3;
-            @UseCard3.canceled += instance.OnUseCard3;
-            @UseCard4.started += instance.OnUseCard4;
-            @UseCard4.performed += instance.OnUseCard4;
-            @UseCard4.canceled += instance.OnUseCard4;
-            @UseCard5.started += instance.OnUseCard5;
-            @UseCard5.performed += instance.OnUseCard5;
-            @UseCard5.canceled += instance.OnUseCard5;
+            @Card1.started += instance.OnCard1;
+            @Card1.performed += instance.OnCard1;
+            @Card1.canceled += instance.OnCard1;
+            @Card2.started += instance.OnCard2;
+            @Card2.performed += instance.OnCard2;
+            @Card2.canceled += instance.OnCard2;
+            @Card3.started += instance.OnCard3;
+            @Card3.performed += instance.OnCard3;
+            @Card3.canceled += instance.OnCard3;
+            @Card4.started += instance.OnCard4;
+            @Card4.performed += instance.OnCard4;
+            @Card4.canceled += instance.OnCard4;
+            @Card5.started += instance.OnCard5;
+            @Card5.performed += instance.OnCard5;
+            @Card5.canceled += instance.OnCard5;
+            @Redraw.started += instance.OnRedraw;
+            @Redraw.performed += instance.OnRedraw;
+            @Redraw.canceled += instance.OnRedraw;
         }
 
         /// <summary>
@@ -1571,21 +1600,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Dodge.started -= instance.OnDodge;
             @Dodge.performed -= instance.OnDodge;
             @Dodge.canceled -= instance.OnDodge;
-            @UseCard1.started -= instance.OnUseCard1;
-            @UseCard1.performed -= instance.OnUseCard1;
-            @UseCard1.canceled -= instance.OnUseCard1;
-            @UseCard2.started -= instance.OnUseCard2;
-            @UseCard2.performed -= instance.OnUseCard2;
-            @UseCard2.canceled -= instance.OnUseCard2;
-            @UseCard3.started -= instance.OnUseCard3;
-            @UseCard3.performed -= instance.OnUseCard3;
-            @UseCard3.canceled -= instance.OnUseCard3;
-            @UseCard4.started -= instance.OnUseCard4;
-            @UseCard4.performed -= instance.OnUseCard4;
-            @UseCard4.canceled -= instance.OnUseCard4;
-            @UseCard5.started -= instance.OnUseCard5;
-            @UseCard5.performed -= instance.OnUseCard5;
-            @UseCard5.canceled -= instance.OnUseCard5;
+            @Card1.started -= instance.OnCard1;
+            @Card1.performed -= instance.OnCard1;
+            @Card1.canceled -= instance.OnCard1;
+            @Card2.started -= instance.OnCard2;
+            @Card2.performed -= instance.OnCard2;
+            @Card2.canceled -= instance.OnCard2;
+            @Card3.started -= instance.OnCard3;
+            @Card3.performed -= instance.OnCard3;
+            @Card3.canceled -= instance.OnCard3;
+            @Card4.started -= instance.OnCard4;
+            @Card4.performed -= instance.OnCard4;
+            @Card4.canceled -= instance.OnCard4;
+            @Card5.started -= instance.OnCard5;
+            @Card5.performed -= instance.OnCard5;
+            @Card5.canceled -= instance.OnCard5;
+            @Redraw.started -= instance.OnRedraw;
+            @Redraw.performed -= instance.OnRedraw;
+            @Redraw.canceled -= instance.OnRedraw;
         }
 
         /// <summary>
@@ -1950,40 +1982,47 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDodge(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Use Card 1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Card1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUseCard1(InputAction.CallbackContext context);
+        void OnCard1(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Use Card 2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Card2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUseCard2(InputAction.CallbackContext context);
+        void OnCard2(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Use Card 3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Card3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUseCard3(InputAction.CallbackContext context);
+        void OnCard3(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Use Card 4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Card4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUseCard4(InputAction.CallbackContext context);
+        void OnCard4(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Use Card 5" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Card5" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUseCard5(InputAction.CallbackContext context);
+        void OnCard5(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Redraw" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRedraw(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

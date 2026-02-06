@@ -11,5 +11,11 @@ public class Card : MonoBehaviour
 
     #region Methods
 
+    public void SetUp(ScriptableCard data)
+    {
+        cardData = data;
+        GetComponent<CardUI>().SetCardUI();
+    }
+
     #endregion
 }

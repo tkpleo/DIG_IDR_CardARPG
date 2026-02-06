@@ -8,27 +8,30 @@ public class BulletAbilityManager : MonoBehaviour
     //public List<BulletAbility> bulletAbilities;
     //public List<BulletAbility> activeAbilities;
     
-    public bool BA_DamageIncrease = false;
-    public bool BA_DamageMultiplier = false;
+    public int BA_DamageIncrease = 0;
+    public float BA_DamageMultiplier = 1f;
     public bool BA_Stun = false;
     public bool BA_AOE = false;
     public bool BA_Slow = false;
+    public bool BA_Opportunist = false;
+    public bool BA_GoldenGun = false;
+    public GameObject goldenGunVFX;
 
     private int bulletsToFire = 1;
-    private int bulletDamage;
+    private float bulletDamage;
     private float bulletSpeed;
 
     public void BulletBuilder(Bullet bullet)
     {
-        bulletDamage = 1;
+        bulletDamage = 1f;
         bulletSpeed = 10f;
-        if (BA_DamageIncrease == true)
+        if (BA_DamageIncrease > 0)
         {
-            bulletDamage += 1;
+            bulletDamage += BA_DamageIncrease;
         }
-        if (BA_DamageMultiplier == true)
+        if (BA_DamageMultiplier > 1f)
         {
-            bulletDamage *= 2;
+            bulletDamage *= BA_DamageMultiplier;
         }
         if (BA_Stun == true)
         {
@@ -43,14 +46,33 @@ public class BulletAbilityManager : MonoBehaviour
         {
             bullet.isSlowBullet = true;
         }
-        
+        if (BA_Opportunist == true)
+        {
+            bullet.isOpportunistBullet = true;
+        }
+        if (BA_GoldenGun == true)
+        {
+            bulletsToFire = 3;
+            BA_GoldenGun = false;
+        }
         bullet.bulletSpeed = bulletSpeed;
         bullet.bulletDamage = bulletDamage;
+        bulletsToFire -= 1;
 
-        BA_DamageIncrease = false;
-        BA_DamageMultiplier = false;
-        BA_Stun = false;
-        BA_AOE = false;
-        BA_Slow = false;
-}
+        if (bulletsToFire <= 0)
+        {
+            bulletsToFire = 1;
+            BA_DamageIncrease = 0;
+            BA_DamageMultiplier = 1f;
+            BA_Stun = false;
+            BA_AOE = false;
+            BA_Slow = false;
+            BA_Opportunist = false;
+            BA_GoldenGun = false;
+            if (goldenGunVFX != null)
+            {
+                goldenGunVFX.SetActive(false);
+            }
+        }
+    }
 }

@@ -88,7 +88,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Use Card 1",
+                    "name": "Card1",
                     "type": "Button",
                     "id": "3390e740-3ee6-4995-99ef-571dd4fbcf79",
                     "expectedControlType": "",
@@ -97,7 +97,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Use Card 2",
+                    "name": "Card2",
                     "type": "Button",
                     "id": "1680897a-b874-458e-b836-c96d591dd1e7",
                     "expectedControlType": "",
@@ -106,7 +106,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Use Card 3",
+                    "name": "Card3",
                     "type": "Button",
                     "id": "bd17a69b-4f1e-4a55-846c-9a41ee3c7b50",
                     "expectedControlType": "",
@@ -115,7 +115,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Use Card 4",
+                    "name": "Card4",
                     "type": "Button",
                     "id": "b9a2ac35-d018-491c-89ae-d256ad88cdd1",
                     "expectedControlType": "",
@@ -124,9 +124,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Use Card 5",
+                    "name": "Card5",
                     "type": "Button",
                     "id": "486f46aa-4da2-4f68-b5d2-2749b7bed06c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Redraw",
+                    "type": "Button",
+                    "id": "51318d20-3ec3-4577-a05d-d32faaf8b03e",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -559,7 +568,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Use Card 1",
+                    "action": "Card1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -570,7 +579,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Use Card 2",
+                    "action": "Card2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -581,7 +590,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Use Card 3",
+                    "action": "Card3",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -592,7 +601,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Use Card 4",
+                    "action": "Card4",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -603,7 +612,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Use Card 5",
+                    "action": "Card5",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5593cce2-b92d-4954-a5c2-a5c62f82d99a",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Redraw",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

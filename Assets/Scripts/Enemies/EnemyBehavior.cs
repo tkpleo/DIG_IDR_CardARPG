@@ -11,13 +11,14 @@ public class EnemyBehavior : MonoBehaviour
     public bool isMovingZEnemy = false;
     public float moveSpeed = 2f;
     public float moveDistance = 2f;
-    public int lastDamageTaken = 0;
+    public float damageTaken = 0f;
     public TextMeshProUGUI damageText;
     public GameObject AOEExplosionVFX;
     public GameObject slowAOEExplosionVFX;
+    public GameObject stunAOEExplosionVFX;
 
-    // AOE settings - configurable in the Inspector
-    public LayerMask aoeLayerMask = ~0; // default to all layers; set to your "Enemy" layer in Inspector
+
+    public LayerMask aoeLayerMask = ~0; // default to all layers; set to "Enemy" layer in Inspector
 
     private Vector3 startPosition;
     private float movementTimer = 0f;
@@ -30,7 +31,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         startPosition = transform.position;
         if (damageText != null)
-            damageText.text = lastDamageTaken.ToString();
+            damageText.text = damageTaken.ToString();
     }
 
     // Update is called once per frame
@@ -45,25 +46,33 @@ public class EnemyBehavior : MonoBehaviour
     // Public entrypoint kept for external callers (e.g. Bullet collision)
     public void TakeDamage(Bullet bullet)
     {
-        ApplyDamage(bullet, fromAOE: false);
+        ApplyOnHitEffects(bullet, fromAOE: false);
     }
 
     // Internal helper - fromAOE prevents re-triggering the AOE when propagating damage
-    private void ApplyDamage(Bullet bullet, bool fromAOE)
+    private void ApplyOnHitEffects(Bullet bullet, bool fromAOE)
     {
-        Debug.Log("Enemy took damage: " + bullet.bulletDamage);
-        lastDamageTaken = bullet.bulletDamage;
-        if (damageText != null)
-            damageText.text = lastDamageTaken.ToString();
-
+        damageTaken = bullet.bulletDamage;
         if (bullet.isStunBullet)
         {
+            isStunned = true;
             StartCoroutine(StunEffect());
         }
         if (bullet.isSlowBullet)
         {
+            isSlowed = true;
             StartCoroutine(SlowEffect());
         }
+
+        if (bullet.isOpportunistBullet && (isStunned == true || isSlowed == true))
+        {
+            damageTaken *= 2;
+            Debug.Log("Enemy took opportunist damage");
+        }
+
+        Debug.Log("Enemy took damage: " + damageTaken);
+        if (damageText != null)
+            damageText.text = damageTaken.ToString();
 
         // Only trigger AOE once (when this call is the original hit)
         if (bullet.isAOEBullet && !fromAOE)
@@ -71,6 +80,14 @@ public class EnemyBehavior : MonoBehaviour
             if (bullet.isSlowBullet)
             {
                 Instantiate(slowAOEExplosionVFX, transform.position, Quaternion.identity);
+                if (bullet.isStunBullet)
+                {
+                    Instantiate(stunAOEExplosionVFX, transform.position, Quaternion.identity);
+                }
+            }
+            if (bullet.isStunBullet)
+            {
+                Instantiate(stunAOEExplosionVFX, transform.position, Quaternion.identity);
             }
             else
             { 
@@ -93,20 +110,18 @@ public class EnemyBehavior : MonoBehaviour
                     continue;
 
                 // Propagate damage but mark as fromAOE to avoid cascading AOE
-                enemy.ApplyDamage(bullet, fromAOE: true);
+                enemy.ApplyOnHitEffects(bullet, fromAOE: true);
             }
         }
     }
 
     private IEnumerator SlowEffect()
     {
-        isSlowed = true;
         yield return new WaitForSeconds(4f);
         isSlowed = false;
     }
     private IEnumerator StunEffect()
     {
-        isStunned = true;
         yield return new WaitForSeconds(2f);
         isStunned = false;
     }

@@ -134,10 +134,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
   bulletPrefab: {fileID: 4783138248681624283}
-  bulletSpeed: 15
+  bulletSpeed: 20
   bulletDamage: 1
   isStunBullet: 0
   isAOEBullet: 0
+  AOERadius: 0
+  isSlowBullet: 0
+  isOpportunistBullet: 0
 --- !u!114 &-9198685452074547874
 MonoBehaviour:
   m_ObjectHideFlags: 0

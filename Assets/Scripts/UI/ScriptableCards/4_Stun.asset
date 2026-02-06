@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d123696774cd104ab275ef334fbad69, type: 3}
-  m_Name: AOE
+  m_Name: 4_Stun
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableCard
-  <CardName>k__BackingField: AOE
-  <CardDescription>k__BackingField: Next bullet creates an AOE if it hits an enemy
+  <CardName>k__BackingField: Stun
+  <CardDescription>k__BackingField: Next bullet will stun enemies
   <Image>k__BackingField: {fileID: 0}
+  <cardIndex>k__BackingField: 4

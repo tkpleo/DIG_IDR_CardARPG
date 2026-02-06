@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d123696774cd104ab275ef334fbad69, type: 3}
-  m_Name: Damage Multiplier
+  m_Name: 6_Opportunist
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableCard
-  <CardName>k__BackingField: Damage Multiplier
-  <CardDescription>k__BackingField: Multiplies next bullet's damage x2
+  <CardName>k__BackingField: Opportunist
+  <CardDescription>k__BackingField: Multiplies next bullet by x2 when hitting Hindered
+    enemies
   <Image>k__BackingField: {fileID: 0}
+  <cardIndex>k__BackingField: 6

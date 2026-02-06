@@ -8,11 +8,12 @@ public class Bullet : MonoBehaviour
     private Rigidbody rb;
     private Bullet bulletStats;
     public float bulletSpeed = 10f;
-    public int bulletDamage = 1;
+    public float bulletDamage = 1f;
     public bool isStunBullet = false;
     public bool isAOEBullet = false;
     public float AOERadius = 0f;
     public bool isSlowBullet = false;
+    public bool isOpportunistBullet = false;
 
     // Update is called once per frame
     private void Awake()
@@ -29,7 +30,7 @@ public class Bullet : MonoBehaviour
     {
         if (collidedObject.CompareTag("Enemy"))
         {
-            Debug.Log("Hit an Enemy. Damage dealt: " + bulletDamage);
+            //Debug.Log("Hit an Enemy. Damage dealt: " + bulletDamage);
 
             ObjectPoolManager.ReturnObjectToPool(gameObject);
             collidedObject.GetComponent<EnemyBehavior>().TakeDamage(bulletStats);
@@ -44,7 +45,7 @@ public class Bullet : MonoBehaviour
     private void ResetStats()
     {
         bulletSpeed = 10f;
-        bulletDamage = 1;
+        bulletDamage = 1f;
         isStunBullet = false;
         isAOEBullet = false;
         AOERadius = 0f;

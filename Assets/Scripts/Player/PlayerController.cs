@@ -31,6 +31,15 @@ public class PlayerController : MonoBehaviour
     private bool _isAttacking;
     private bool _attackInput;
 
+    //Inputs for playing cards from hand
+    private bool _card1Input;
+    private bool _card2Input;
+    private bool _card3Input;
+    private bool _card4Input;
+    private bool _card5Input;
+
+    private bool _redrawInput;
+
     public Camera mainCamera;
     public LayerMask groundLayer;
     public Vector2 mousePosition;
@@ -42,12 +51,14 @@ public class PlayerController : MonoBehaviour
     private CharacterController _characterController;
     private PlayerAttack playerAttack;
     public Canvas _CardCanvas;
+    public HandManager handManagerScript;
 
     private void Awake()
     {
         _playerInputActions = new InputSystem_Actions();
         _characterController = GetComponent<CharacterController>();
         playerAttack = GetComponent<PlayerAttack>();
+
 
         _canAttack = true;
         _canDodge = true;
@@ -86,7 +97,15 @@ public class PlayerController : MonoBehaviour
 
         Move();
 
-        
+        if (_card1Input || _card2Input || _card3Input || _card4Input || _card5Input)
+        {
+            CardPlay();
+        }
+
+        if (_redrawInput)
+        {
+            handManagerScript.RedrawHand();
+        }
 
         if (_dodgeInput && _canDodge && _isDodging == false)
         {
@@ -95,7 +114,6 @@ public class PlayerController : MonoBehaviour
         
         if (_attackInput && _canAttack && _isAttacking == false)
         {
-            _isAttacking = true;
             Ray ray = mainCamera.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
@@ -109,16 +127,43 @@ public class PlayerController : MonoBehaviour
                     Quaternion rotation = Quaternion.LookRotation(direction);
                     transform.rotation = rotation;
                 }
+                _isAttacking = true;
                 _canAttack = false;
+                StartCoroutine(Attack());
+                handManagerScript.RedrawIfBuffed();
                 playerAttack.InitAttack();
                 //Debug.DrawLine(ray.origin, hitInfo.point, Color.red);
 
             }
-            StartCoroutine(Attack());
         }
 
     }
- 
+
+    private void CardPlay()
+    {
+        if (_card1Input)
+        {
+            handManagerScript.PlayCard(1);
+        }
+        if (_card2Input)
+        {
+            handManagerScript.PlayCard(2);
+        }
+        if (_card3Input)
+        {
+            handManagerScript.PlayCard(3);
+        }
+        if (_card4Input)
+        {
+            handManagerScript.PlayCard(4);
+        }
+        if (_card5Input)
+        {
+            handManagerScript.PlayCard(5);
+        }
+    }
+
+    //Handles attacking animation and logic booleans
     private IEnumerator Attack()
     {
         animator.SetBool("isAttacking", _isAttacking);
@@ -130,6 +175,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    //Handles dodging animation and logic booleans
     private IEnumerator Dodge()
     {
         
@@ -145,14 +191,11 @@ public class PlayerController : MonoBehaviour
         _canDodge = true;
     }
 
+    //Rotates player based on input unless attacking or dodging
     private void Look()
     {
 
-        if (_input == Vector3.zero || _isDodging == true)
-        {
-            return;
-        }
-        if (_isAttacking == true)
+        if (_input == Vector3.zero || _isDodging == true || _isAttacking == true)
         {
             return;
         }
@@ -163,6 +206,7 @@ public class PlayerController : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, rotationSpeed);
     }
 
+    //checks if player is dodging or attacking before allowing movement, forces forward movement when dodging
     private void Move()
     {
         if (_isDodging == true)
@@ -186,6 +230,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Gets player input from Input System
     private void GetInput()
     {
         Vector2 input = _playerInputActions.Player.Move.ReadValue<Vector2>();
@@ -193,6 +238,12 @@ public class PlayerController : MonoBehaviour
         _dodgeInput = _playerInputActions.Player.Dodge.IsPressed();
         _attackInput = _playerInputActions.Player.Attack.IsPressed();
         mousePosition = _playerInputActions.Player.AttackPos.ReadValue<Vector2>();
+        _card1Input = _playerInputActions.Player.Card1.triggered;
+        _card2Input = _playerInputActions.Player.Card2.triggered;
+        _card3Input = _playerInputActions.Player.Card3.triggered;
+        _card4Input = _playerInputActions.Player.Card4.triggered;
+        _card5Input = _playerInputActions.Player.Card5.triggered;
+        _redrawInput = _playerInputActions.Player.Redraw.triggered;
 
         //Debug.Log(_input); Uncomment to see input vector in console
     }
